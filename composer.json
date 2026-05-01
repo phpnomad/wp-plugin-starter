@@ -7,7 +7,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^8.2",
-        "phpnomad/core": "^1.0",
+        "phpnomad/core": "^3.0",
         "phpnomad/wordpress-integration": "^4.0"
     },
     "require-dev": {
