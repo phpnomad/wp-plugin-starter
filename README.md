@@ -12,23 +12,29 @@ vendor/bin/phpnomad make --from=phpnomad/wp-plugin '{
   "description": "What my plugin does.",
   "vendor": "acme",
   "package": "my-plugin",
-  "namespace": "Acme\\\\MyPlugin",
+  "namespace": "AcmeMyPlugin",
   "textDomain": "my-plugin",
   "authorName": "Your Name",
-  "authorEmail": "you@example.com"
+  "authorEmail": "you@example.com",
+  "authorUrl": ""
 }'
 ```
 
 That's it. After the recipe runs, you have a working PHPNomad WordPress plugin with the right entry file, Application class, root initializer, autoload, tests, and `composer.json` rewritten to match your plugin's identity.
 
-From there, use the rest of PHPNomad's recipes to add functionality:
+### Notes on the bootstrap arguments
+
+- `namespace` — single-segment, PascalCase, no backslashes (e.g. `AcmeMyPlugin`, not `Acme\\MyPlugin`). v1 of the bootstrap recipe doesn't support nested namespaces; if you need one, edit `composer.json` after scaffolding.
+- `authorUrl` — pass an empty string if you don't have one. WordPress will still display the plugin without an Author URI line.
+
+From there, use the rest of PHPNomad's recipes to add functionality. The `initializer` arg points at `{namespace}\\AppInit` — the root initializer the bootstrap created:
 
 ```bash
-vendor/bin/phpnomad make --from=phpnomad/datastore '{"name":"Order","initializer":"Acme\\\\MyPlugin\\\\AppInit"}'
-vendor/bin/phpnomad make --from=phpnomad/cpt-datastore '{"name":"Event","postType":"event","initializer":"Acme\\\\MyPlugin\\\\AppInit"}'
+vendor/bin/phpnomad make --from=phpnomad/datastore '{"name":"Order","initializer":"AcmeMyPlugin\\\\AppInit"}'
+vendor/bin/phpnomad make --from=phpnomad/cpt-datastore '{"name":"Event","postType":"acme-event","pluralLabel":"Events","singularLabel":"Event","textDomain":"my-plugin","initializer":"AcmeMyPlugin\\\\AppInit"}'
 ```
 
-Run `vendor/bin/phpnomad recipes:list` to see everything available.
+Run `vendor/bin/phpnomad recipes:list --all=1` to see everything available across the installed kits.
 
 ## Why a starter plus recipes (and not a clone-this-template)
 
